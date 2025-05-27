@@ -27,19 +27,17 @@ export default function Sparkles({ instanceId }: SparklesProps) {
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const [isActive, setIsActive] = useState(true)
 
-  // Safe scroll handler with improved throttling
   const handleScroll = useCallback(() => {
     if (!mountedRef.current || !isActive) return
 
     const scrollHeight = document.documentElement.scrollHeight - window.innerHeight
-    if (scrollHeight <= 0) return // Prevent division by zero
+    if (scrollHeight <= 0) return
 
     const currentScrollPosition = window.scrollY
     const newScrollPercentage = Math.min(100, Math.max(0, (currentScrollPosition / scrollHeight) * 100))
     setScrollPercentage(newScrollPercentage)
   }, [isActive])
 
-  // Throttled scroll handler setup with better cleanup
   useEffect(() => {
     if (!isActive || !mountedRef.current) return
 
@@ -48,11 +46,8 @@ export default function Sparkles({ instanceId }: SparklesProps) {
 
     const scrollListener = () => {
       const currentScroll = window.scrollY
-
-      // Only process if scroll position actually changed
       if (currentScroll !== lastScrollY && !ticking && mountedRef.current && isActive) {
         lastScrollY = currentScroll
-
         window.requestAnimationFrame(() => {
           if (mountedRef.current && isActive) {
             handleScroll()
@@ -63,7 +58,6 @@ export default function Sparkles({ instanceId }: SparklesProps) {
       }
     }
 
-    // Use passive listener for better performance
     window.addEventListener("scroll", scrollListener, { passive: true })
 
     return () => {
@@ -71,11 +65,8 @@ export default function Sparkles({ instanceId }: SparklesProps) {
     }
   }, [handleScroll, isActive])
 
-  // IMPORTANT: Make sure component fully cleans up on unmount
   useEffect(() => {
     mountedRef.current = true
-
-    // Set up with a slight delay to ensure proper mounting
     const initTimeout = setTimeout(() => {
       if (mountedRef.current) {
         setIsActive(true)
@@ -83,7 +74,6 @@ export default function Sparkles({ instanceId }: SparklesProps) {
     }, 50)
     timeoutsRef.current.push(initTimeout)
 
-    // Throttled scroll handler
     let ticking = false
     const scrollListener = () => {
       if (!ticking && mountedRef.current && isActive) {
@@ -98,27 +88,16 @@ export default function Sparkles({ instanceId }: SparklesProps) {
     window.addEventListener("scroll", scrollListener, { passive: true })
 
     return () => {
-      // Mark as unmounted first to prevent any new state updates
       mountedRef.current = false
       setIsActive(false)
-
-      // Remove event listener
       window.removeEventListener("scroll", scrollListener)
-
-      // Clear interval
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
         intervalRef.current = null
       }
-
-      // Clear all timeouts
       timeoutsRef.current.forEach(clearTimeout)
       timeoutsRef.current = []
-
-      // Reset sparkles state safely
       setSparkles([])
-
-      // Force cleanup of any lingering animations
       if (typeof window !== "undefined") {
         const highestId = setTimeout(() => {}, 0)
         for (let i = 0; i < highestId; i++) {
@@ -129,31 +108,28 @@ export default function Sparkles({ instanceId }: SparklesProps) {
     }
   }, [handleScroll])
 
-  // Sparkle creation effect - separated from the scroll effect
   useEffect(() => {
     if (!mountedRef.current || !isActive) return
 
-    // Clear any existing interval
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
       intervalRef.current = null
     }
 
-    const baseInterval = 2000 // Base interval in milliseconds
-    const minInterval = 300 // Minimum interval in milliseconds
-    const initialSparkleChance = 0.3 // Initial chance of creating a sparkle (30%)
-    const maxSparkleChance = 0.85 // Maximum chance of creating a sparkle (85%)
+    const baseInterval = 1200 // mais frequente
+    const minInterval = 200
+    const initialSparkleChance = 0.5 // chance inicial maior
+    const maxSparkleChance = 0.95 // chance máxima maior
 
-    // Create sparkle function
     const createSparkle = () => {
       if (!mountedRef.current || !isActive) return
 
       const sparkleId = `sparkle-${localInstanceId.current}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
       const newSparkle = {
         id: sparkleId,
-        size: Math.random() * 3 + 7, // 7-10px range
+        size: Math.random() * 4 + 8, // 8-12px
         rotation: Math.random() * 360,
-        maxOpacity: Math.random() * 0.5 + 0.5,
+        maxOpacity: Math.random() * 0.7 + 0.4, // brilho mais suave, max 1.1
         style: {
           top: `${Math.random() * 100}%`,
           left: `${Math.random() * 100}%`,
@@ -166,34 +142,27 @@ export default function Sparkles({ instanceId }: SparklesProps) {
         if (mountedRef.current && isActive) {
           setSparkles((prev) => prev.filter((s) => s.id !== sparkleId))
         }
-      }, 700)
-
+      }, 900) // duração um pouco maior
       timeoutsRef.current.push(timeout)
     }
 
-    // Calculate interval and chance based on scroll
-    const adjustedInterval = Math.max(baseInterval - scrollPercentage * 17, minInterval)
+    const adjustedInterval = Math.max(baseInterval - scrollPercentage * 20, minInterval)
     const adjustedChance = initialSparkleChance + (maxSparkleChance - initialSparkleChance) * (scrollPercentage / 100)
 
-    // Set up new interval
-    intervalRef.current = setInterval(
-      () => {
-        if (!mountedRef.current || !isActive) {
-          if (intervalRef.current) {
-            clearInterval(intervalRef.current)
-            intervalRef.current = null
-          }
-          return
+    intervalRef.current = setInterval(() => {
+      if (!mountedRef.current || !isActive) {
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current)
+          intervalRef.current = null
         }
+        return
+      }
 
-        if (Math.random() < adjustedChance) {
-          createSparkle()
-        }
-      },
-      Math.random() * 1500 + 500,
-    )
+      if (Math.random() < adjustedChance) {
+        createSparkle()
+      }
+    }, Math.random() * 1200 + 300)
 
-    // Cleanup function
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
@@ -202,7 +171,6 @@ export default function Sparkles({ instanceId }: SparklesProps) {
     }
   }, [scrollPercentage, isActive])
 
-  // Render nothing if not active
   if (!isActive || !mountedRef.current) return null
 
   return (
@@ -213,14 +181,14 @@ export default function Sparkles({ instanceId }: SparklesProps) {
             key={sparkle.id}
             initial={{ scale: 0, opacity: 0 }}
             animate={{
-              scale: [0, 1.2, 0],
-              opacity: [0, sparkle.maxOpacity, 0],
+              scale: [0, 1, 0.8, 0],
+              opacity: [0, sparkle.maxOpacity, sparkle.maxOpacity * 0.6, 0],
             }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{
-              duration: 0.7,
-              times: [0, 0.3, 1],
-              ease: [0.4, 0, 0.2, 1],
+              duration: 0.9,
+              times: [0, 0.4, 0.7, 1],
+              ease: [0.3, 0, 0.2, 1],
             }}
             style={{
               position: "absolute",
@@ -228,6 +196,9 @@ export default function Sparkles({ instanceId }: SparklesProps) {
               height: sparkle.size,
               ...sparkle.style,
               transform: `rotate(${sparkle.rotation}deg)`,
+              boxShadow: "0 0 8px 3px rgba(255, 255, 255, 0.6)",
+              transition: "box-shadow 0.3s ease",
+              borderRadius: "50%",
             }}
             onAnimationComplete={() => {
               if (mountedRef.current && isActive) {
@@ -241,42 +212,48 @@ export default function Sparkles({ instanceId }: SparklesProps) {
                 background: "white",
                 clipPath:
                   "polygon(50% 0%, 45% 40%, 60% 40%, 60% 45%, 40% 45%, 40% 55%, 60% 55%, 60% 60%, 45% 60%, 50% 100%, 55% 60%, 40% 60%, 40% 55%, 60% 55%, 60% 45%, 40% 45%, 40% 40%, 55% 40%)",
-                boxShadow: "0 0 20px 5px rgba(255, 255, 255, 0.8)",
+                boxShadow: "0 0 22px 7px rgba(255, 255, 255, 0.85)",
+                borderRadius: "50%",
               }}
             />
             <div
               className="absolute inset-0"
               style={{
                 background: "linear-gradient(90deg, transparent 35%, white 50%, transparent 65%)",
-                opacity: 0.7,
+                opacity: 0.8,
+                borderRadius: "50%",
               }}
             />
             <div
               className="absolute inset-0"
               style={{
                 background: "linear-gradient(0deg, transparent 35%, white 50%, transparent 65%)",
-                opacity: 0.7,
+                opacity: 0.8,
+                borderRadius: "50%",
               }}
             />
             <div
               className="absolute inset-0"
               style={{
                 background: "linear-gradient(45deg, transparent 35%, white 50%, transparent 65%)",
-                opacity: 0.5,
+                opacity: 0.6,
+                borderRadius: "50%",
               }}
             />
             <div
               className="absolute inset-0"
               style={{
                 background: "linear-gradient(-45deg, transparent 35%, white 50%, transparent 65%)",
-                opacity: 0.5,
+                opacity: 0.6,
+                borderRadius: "50%",
               }}
             />
             <div
               className="absolute inset-0"
               style={{
-                boxShadow: "0 0 15px 5px rgba(255, 255, 255, 0.3)",
-                filter: "blur(2px)",
+                boxShadow: "0 0 18px 6px rgba(255, 255, 255, 0.35)",
+                filter: "blur(2.2px)",
+                borderRadius: "50%",
               }}
             />
           </motion.div>
