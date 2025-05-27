@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /management/
+Disallow: /api/admin/
+Allow: /
+
+Sitemap: https://hodl.com/sitemap.xml

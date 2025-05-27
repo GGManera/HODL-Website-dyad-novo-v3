@@ -1,0 +1,176 @@
+"use client"
+
+// This is a standalone file to copy into your game project
+// It recreates the HODL website navbar design
+
+import { useState, useEffect, useRef } from "react"
+
+export default function HODLNavbar() {
+  const [isOpen, setIsOpen] = useState(false)
+  const [scrollY, setScrollY] = useState(0)
+  const menuRef = useRef(null)
+
+  // Get current path to highlight active link
+  const currentPath = typeof window !== "undefined" ? window.location.pathname : ""
+  const currentHostname = typeof window !== "undefined" ? window.location.hostname : ""
+  const isGamePage = currentHostname.includes("game.hodlcoin.co")
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY)
+    window.addEventListener("scroll", handleScroll)
+    handleScroll()
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
+
+  const toggleMenu = () => setIsOpen(!isOpen)
+
+  // Define navigation links
+  const navLinks = [
+    { href: "https://hodlcoin.co", label: "Home", external: true },
+    { href: "https://hodlcoin.co/onboarding", label: "Get Started", external: true },
+    { href: "https://hodlcoin.co/nfts", label: "NFTs", external: true },
+    { href: "https://whitepaper.hodlcoin.co", label: "Whitepaper", external: true },
+    { href: "https://dashboard.hodlcoin.co", label: "Dashboard", external: true },
+    { href: "https://game.hodlcoin.co", label: "Game", external: true },
+  ]
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-[100] flex justify-between items-center p-4 sm:p-6 bg-gray-900/80 backdrop-blur-sm h-16 font-raleway">
+      <a
+        href="https://hodlcoin.co"
+        className="text-xl text-white hover:text-blue-400 transition-colors duration-300"
+        style={{
+          fontFamily: "Raleway, sans-serif",
+          fontWeight: 700,
+          letterSpacing: "-0.01em",
+          fontSize: "1.25rem",
+        }}
+      >
+        HODL
+      </a>
+
+      {/* Desktop Navigation */}
+      <nav className="hidden md:flex space-x-4" style={{ fontFamily: "Raleway, sans-serif" }}>
+        {navLinks.map((link) => {
+          const isActive =
+            (link.href === "https://game.hodlcoin.co" && isGamePage) ||
+            (link.href === "https://hodlcoin.co" && currentPath === "/" && !isGamePage)
+
+          return (
+            <a
+              key={link.href}
+              href={link.href}
+              className={`${
+                isActive ? "text-blue-400" : "text-white hover:text-blue-400"
+              } transition-colors duration-300`}
+              target={link.external ? "_blank" : undefined}
+              rel={link.external ? "noopener noreferrer" : undefined}
+              style={{ position: "relative" }}
+            >
+              {link.label}
+              {isActive && (
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "-4px",
+                    left: 0,
+                    right: 0,
+                    height: "2px",
+                    backgroundColor: "#60a5fa", // blue-400
+                  }}
+                />
+              )}
+            </a>
+          )
+        })}
+      </nav>
+
+      {/* Mobile Menu Button */}
+      <div className="md:hidden">
+        <button onClick={toggleMenu} className="text-white p-2">
+          {isOpen ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          )}
+        </button>
+
+        {/* Mobile Menu */}
+        {isOpen && (
+          <div
+            ref={menuRef}
+            className="absolute top-16 left-0 right-0 bg-gray-900 p-4 z-50"
+            style={{
+              opacity: 1,
+              transform: "translateY(0)",
+              transition: "opacity 0.2s, transform 0.2s",
+              fontFamily: "Raleway, sans-serif",
+            }}
+          >
+            <nav className="flex flex-col space-y-4">
+              {navLinks.map((link) => {
+                const isActive =
+                  (link.href === "https://game.hodlcoin.co" && isGamePage) ||
+                  (link.href === "https://hodlcoin.co" && currentPath === "/" && !isGamePage)
+
+                return (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className={`${
+                      isActive ? "text-blue-400" : "text-white hover:text-blue-400"
+                    } transition-colors duration-300`}
+                    target={link.external ? "_blank" : undefined}
+                    rel={link.external ? "noopener noreferrer" : undefined}
+                  >
+                    {link.label}
+                  </a>
+                )
+              })}
+            </nav>
+          </div>
+        )}
+      </div>
+    </header>
+  )
+}

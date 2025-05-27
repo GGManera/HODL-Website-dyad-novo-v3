@@ -1,0 +1,28 @@
+<!-- Alternative implementation using CSS classes -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HODL Game</title>
+  
+  <!-- Preload the Raleway font to avoid FOUT (Flash of Unstyled Text) -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap" as="style">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap">
+  
+  <!-- Include your CSS -->
+  <link rel="stylesheet" href="font-fix.css">
+</head>
+<body>
+  <header class="fixed top-0 left-0 right-0 z-[100] flex justify-between items-center p-4 sm:p-6 bg-gray-900/80 backdrop-blur-sm h-16">
+    <!-- Use the specific hodl-logo class -->
+    <a href="https://hodlcoin.co" class="hodl-logo">
+      HODL
+    </a>
+    
+    <!-- Rest of your navbar -->
+  </header>
+  
+  <!-- Your game content -->
+</body>
+</html>
