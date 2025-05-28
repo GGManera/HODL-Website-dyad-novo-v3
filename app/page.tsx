@@ -380,7 +380,7 @@ export default function Home() {
                   {
                     title: "Algorand is Home.<br />Not the Cage.",
                     description:
-                      "$HODL leverages Algorand's advanced, secure, and energy-efficient blockchain infrastructure, ensuring rapid transactions, minimal fees, and seamless integration within our ecosystem. Despite its roots on Algorand, $HODL was never about tribalism. We’re building a multichain ecosystem that honors those who came first, while opening the door to communities aligned with a vision that transcends maximalism.",
+                      "$HODL leverages Algorand's advanced, secure, and energy-efficient blockchain infrastructure, ensuring rapid transactions, minimal fees, and seamless integration within our ecosystem. <br />Despite its roots on Algorand, $HODL was never about tribalism. We’re building a multichain ecosystem that honors those who came first, while opening the door to communities aligned with a vision that transcends maximalism.",
                     link: { href: "https://algorand.co", text: "algorand.co" },
                   },
                   {
@@ -406,7 +406,7 @@ export default function Home() {
                   >
                     <h3 className="text-xl font-semibold mb-4 text-blue-400 font-raleway" dangerouslySetInnerHTML={{ __html: feature.title }}></h3>
                     <div className="flex-grow"> {/* Wrapper to make content grow */}
-                      <p className="text-gray-300 font-raleway mb-6 text-justify">{feature.description}</p> {/* Added text-justify */}
+                      <p className="text-gray-300 font-raleway mb-6 text-justify" dangerouslySetInnerHTML={{ __html: feature.description }}></p> {/* Added text-justify */}
                     </div>
                     {feature.link.isInternal ? (
                       <Link
