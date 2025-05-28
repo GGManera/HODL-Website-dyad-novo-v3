@@ -380,19 +380,19 @@ export default function Home() {
                   {
                     title: "Algorand is Home.<br />Not the Cage.",
                     description:
-                      "$HODL leverages Algorand's advanced, secure, and energy-efficient blockchain infrastructure, ensuring rapid transactions, minimal fees, and seamless integration within our ecosystem. <br />Despite its roots on Algorand, $HODL was never about tribalism. We’re building a multichain ecosystem that honors those who came first, while opening the door to communities aligned with a vision that transcends maximalism.",
+                      "$HODL leverages Algorand's advanced, secure, and energy-efficient blockchain infrastructure, ensuring rapid transactions, minimal fees, and seamless integration within our ecosystem. <br /><br />Despite its roots on Algorand, $HODL was never about tribalism. We’re building a multichain ecosystem that honors those who came first, while opening the door to communities aligned with a vision that transcends maximalism.",
                     link: { href: "https://algorand.co", text: "algorand.co" },
                   },
                   {
-                    title: "Evolving Art, Month by Month.",
+                    title: "Evolving Art, <br />Month by Month.",
                     description:
-                      "Each month, a new artist joins the $HODL movement to reinterpret our four core NFTs through a fresh lens and unique style. Guided by a collaborative curation process, every edition pushes the concept forward. Think of it as a growing gallery where every piece tells a new chapter — same Heroes, new vibes.",
+                      "Each month, a new artist joins the $HODL movement to reinterpret our four core NFTs — Emerald, Ruby, Sapphire, and Diamond — through a fresh lens and unique style. <br /><br />Guided by a collaborative curation process, every edition pushes the concept forward. <br />Think of it as a growing gallery where every piece tells a new chapter — same Heroes, new vibes.",
                     link: { href: "/nfts", text: "NFT Gallery", isInternal: true },
                   },
                   {
-                    title: "Hold. Level Up. Get Airdrops.",
+                    title: "Hold. Level Up. <br />Get Airdrops.",
                     description:
-                      "Hold longer, climb higher. Our leaderboard tracks your commitment, while milestone rewards keep things spicy. This is more than a meme. It's a movement disguised as a game. Competitive? Cooperative? Both. Top holders race for prestige and the biggest milestones. And in doing so, they’re drawing a chart that only wants to go up.",
+                      "Hold longer, climb higher. Our leaderboard tracks your commitment, while milestone rewards keep things spicy. This is more than a meme. It's a movement disguised as a game. <br /><br />Competitive? Cooperative? <br />Both. <br />Top holders race for prestige and the biggest milestones. By doing so, they’re drawing a chart that only wants to go up.",
                     link: {
                       href: "https://heroes.hodlcoin.co",
                       text: "Hall Of Degen Legends",
