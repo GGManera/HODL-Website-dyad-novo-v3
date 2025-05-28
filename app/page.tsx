@@ -168,7 +168,7 @@ export default function Home() {
       y: 0,
       transition: springConfig,
     },
-  },
+  } // Removed the trailing comma here
 
   return (
     <AnimatePresence>
