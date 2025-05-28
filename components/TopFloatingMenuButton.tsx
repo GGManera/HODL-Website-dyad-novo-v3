@@ -5,12 +5,14 @@ import { usePathname } from "next/navigation"
 import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
+import { useUIOverlay } from "@/contexts/ui-overlay-context" // Import the hook
 
 export default function TopFloatingMenuButton() {
   const [isOpen, setIsOpen] = useState(false)
   const buttonRef = useRef<HTMLDivElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
+  const { isOverlayActive } = useUIOverlay() // Use the context
 
   useEffect(() => {
     const handleToggleEvent = () => {
@@ -96,6 +98,11 @@ export default function TopFloatingMenuButton() {
 
   // Keep the original order (not reversed)
   const displayLinks = navLinks
+
+  // Hide the button if an overlay is active
+  if (isOverlayActive) {
+    return null;
+  }
 
   return (
     <>

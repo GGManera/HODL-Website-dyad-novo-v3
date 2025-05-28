@@ -9,6 +9,7 @@ import MobileBottomNav from "@/components/MobileBottomNav"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import FullScreenButton from "@/components/nfts/FullScreenButton"
 import NFTCarousel from "@/components/nfts/NFTCarousel"
+import { useUIOverlay } from "@/contexts/ui-overlay-context" // Import the UI overlay hook
 
 type GroupingMode = "tiers" | "editions"
 type SortingOrder = "highest_first" | "highest_last" | "newest_first" | "oldest_first"
@@ -40,14 +41,16 @@ export default function NFTClientPage({ instanceId }: NFTClientPageProps) {
   const [isMobileState, setIsMobileState] = useState(false)
   const [isInitialized, setIsInitialized] = useState(false)
 
-  // Add state for carousel
+  // Add state for carousel and modal
   const [isCarouselOpen, setIsCarouselOpen] = useState(false)
+  const [selectedNFT, setSelectedNFT] = useState(null)
 
   // Check if we're on mobile
   const isMobile = useMediaQuery("(max-width: 768px)")
 
-  // Use the NFT context hook
+  // Use the NFT context hook and UI overlay context hook
   const { nfts: allNfts, isLoading, loadingProgress } = useNFTs()
+  const { setOverlayActive } = useUIOverlay()
 
   // Add this useEffect after your existing state declarations
   useEffect(() => {
@@ -234,10 +237,28 @@ export default function NFTClientPage({ instanceId }: NFTClientPageProps) {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
-  // Handle opening the carousel
+  // Handle opening/closing the carousel
   const openCarousel = () => {
     setIsCarouselOpen(true)
   }
+
+  const closeCarousel = () => {
+    setIsCarouselOpen(false)
+  }
+
+  // Handle opening/closing the NFT modal
+  const handleNFTSelect = (nft: any) => {
+    setSelectedNFT(nft)
+  }
+
+  const handleNFTClose = () => {
+    setSelectedNFT(null)
+  }
+
+  // Effect to update UI overlay context based on modal/carousel state
+  useEffect(() => {
+    setOverlayActive(isCarouselOpen || !!selectedNFT)
+  }, [isCarouselOpen, selectedNFT, setOverlayActive])
 
   // If not hydrated yet, show a loading state
   if (!hydrated || !isInitialized) {
@@ -350,7 +371,12 @@ export default function NFTClientPage({ instanceId }: NFTClientPageProps) {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.2 }}
             >
-              <TierView sortingState={sortingState} isPageMount={true} isRefresh={isRefreshRef.current} />
+              <TierView
+                sortingState={sortingState}
+                isPageMount={true}
+                isRefresh={isRefreshRef.current}
+                onNFTClick={handleNFTSelect} // Pass the handler
+              />
             </motion.div>
           ) : (
             <motion.div
@@ -360,7 +386,12 @@ export default function NFTClientPage({ instanceId }: NFTClientPageProps) {
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.2 }}
             >
-              <EditionView sortingState={sortingState} isPageMount={true} isRefresh={isRefreshRef.current} />
+              <EditionView
+                sortingState={sortingState}
+                isPageMount={true}
+                isRefresh={isRefreshRef.current}
+                onNFTClick={handleNFTSelect} // Pass the handler
+              />
             </motion.div>
           )}
         </AnimatePresence>
@@ -368,8 +399,11 @@ export default function NFTClientPage({ instanceId }: NFTClientPageProps) {
 
       {/* NFT Carousel */}
       {hydrated && (
-        <NFTCarousel isOpen={isCarouselOpen} onClose={() => setIsCarouselOpen(false)} nfts={getAllSortedNFTs()} />
+        <NFTCarousel isOpen={isCarouselOpen} onClose={closeCarousel} nfts={getAllSortedNFTs()} />
       )}
+
+      {/* NFT Modal */}
+      {selectedNFT && <NFTModal asset={selectedNFT} onClose={handleNFTClose} />}
 
       {/* Footer */}
       <footer className="py-12 pb-32 md:pb-12 border-t border-blue-500/10 bg-black/50 backdrop-blur-sm">

@@ -5,7 +5,7 @@ import { useMediaQuery } from "@/hooks/use-media-query"
 import NFTCard from "./NFTCard"
 import { motion, AnimatePresence } from "framer-motion"
 import { useNFTs } from "@/contexts/nft-context"
-import NFTModal from "./NFTModal"
+import NFTModal from "./NFTModal" // Keep import for type definition, but modal is rendered by parent
 
 interface GroupedNFTs {
   [edition: string]: any[]
@@ -20,13 +20,14 @@ interface EditionViewProps {
   sortingState: SortingState
   isPageMount: boolean
   isRefresh?: boolean
+  onNFTClick: (nft: any) => void // Add onNFTClick prop
 }
 
-export default function EditionView({ sortingState, isPageMount, isRefresh = false }: EditionViewProps) {
+export default function EditionView({ sortingState, isPageMount, isRefresh = false, onNFTClick }: EditionViewProps) {
   const [isMounted, setIsMounted] = useState(false)
   const { nfts: allNfts, isLoading } = useNFTs()
   const [groupedNfts, setGroupedNfts] = useState<GroupedNFTs>({})
-  const [selectedNFT, setSelectedNFT] = useState(null)
+  // Removed selectedNFT state as it's now managed by parent
   const isMobile = useMediaQuery("(max-width: 768px)")
   const [forceRerender, setForceRerender] = useState(0)
   const timeoutsRef = useRef<NodeJS.Timeout[]>([])
@@ -95,18 +96,15 @@ export default function EditionView({ sortingState, isPageMount, isRefresh = fal
       // Sort NFTs within each edition
       Object.keys(sorted).forEach((edition) => {
         sorted[edition] = [...sorted[edition]].sort((a, b) => {
-          const getGemValue = (nft: any) => {
-            const getTierNumber = (tier: string | undefined) => {
-              if (!tier) return 0
-              const match = tier.match(/\d+/)
-              return match ? Number.parseInt(match[0], 10) : 0
-            }
-            const tierTrait = nft.collectible?.traits?.find((t: any) => t.display_name === "Tier")
-            return getTierNumber(tierTrait?.display_value)
+          const getTierNumber = (tier: string | undefined) => {
+            if (!tier) return 0
+            const match = tier.match(/\d+/)
+            return match ? Number.parseInt(match[0], 10) : 0
           }
-
-          const gemA = getGemValue(a)
-          const gemB = getGemValue(b)
+          const tierTraitA = a.collectible?.traits?.find((t: any) => t.display_name === "Tier")
+          const tierTraitB = b.collectible?.traits?.find((t: any) => t.display_name === "Tier")
+          const gemA = getTierNumber(tierTraitA?.display_value)
+          const gemB = getTierNumber(tierTraitB?.display_value)
 
           if (gemA !== gemB) {
             return sortingState.gemOrder === "highest_first" ? gemA - gemB : gemB - gemA
@@ -263,7 +261,7 @@ export default function EditionView({ sortingState, isPageMount, isRefresh = fal
                   <NFTCard
                     key={nft.asset_id}
                     asset={nft}
-                    onClick={() => setSelectedNFT(nft)}
+                    onClick={() => onNFTClick(nft)} // Use the passed handler
                     view="editions"
                     index={index}
                     forceAnimation={isRefresh || isPageMount}
@@ -274,7 +272,7 @@ export default function EditionView({ sortingState, isPageMount, isRefresh = fal
           ))}
         </AnimatePresence>
       )}
-      {selectedNFT && <NFTModal asset={selectedNFT} onClose={() => setSelectedNFT(null)} />}
+      {/* Removed NFTModal rendering from here */}
     </div>
   )
 }

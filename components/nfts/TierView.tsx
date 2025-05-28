@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import NFTCard from "./NFTCard"
-import NFTModal from "./NFTModal"
+import NFTModal from "./NFTModal" // Keep import for type definition, but modal is rendered by parent
 import GemIndicator from "./GemIndicator"
 import { motion, AnimatePresence } from "framer-motion"
 import { useNFTs } from "@/contexts/nft-context"
@@ -17,14 +17,15 @@ interface TierViewProps {
   sortingState: SortingState
   isPageMount: boolean
   isRefresh?: boolean
+  onNFTClick: (nft: any) => void // Add onNFTClick prop
 }
 
-export default function TierView({ sortingState, isPageMount, isRefresh = false }: TierViewProps) {
+export default function TierView({ sortingState, isPageMount, isRefresh = false, onNFTClick }: TierViewProps) {
   const [isMounted, setIsMounted] = useState(false)
   const isMobile = useMediaQuery("(max-width: 768px)")
   const { nfts: allNfts, isLoading, loadingProgress, hasInitialLoad } = useNFTs()
   const [groupedNfts, setGroupedNfts] = useState<{ [tier: string]: any[] }>({})
-  const [selectedNFT, setSelectedNFT] = useState(null)
+  // Removed selectedNFT state as it's now managed by parent
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [forceRerender, setForceRerender] = useState(0)
   const timeoutsRef = useRef<NodeJS.Timeout[]>([])
@@ -244,7 +245,7 @@ export default function TierView({ sortingState, isPageMount, isRefresh = false 
                             <div key={nft.asset_id} className="aspect-square w-full">
                               <NFTCard
                                 asset={nft}
-                                onClick={() => setSelectedNFT(nft)}
+                                onClick={() => onNFTClick(nft)} // Use the passed handler
                                 view="tiers"
                                 index={index}
                                 forceAnimation={isRefresh || isPageMount}
@@ -262,7 +263,7 @@ export default function TierView({ sortingState, isPageMount, isRefresh = false 
           )}
         </AnimatePresence>
 
-        {selectedNFT && <NFTModal asset={selectedNFT} onClose={() => setSelectedNFT(null)} />}
+        {/* Removed NFTModal rendering from here */}
       </motion.div>
     )
   }
@@ -299,7 +300,7 @@ export default function TierView({ sortingState, isPageMount, isRefresh = false 
                       <div key={nft.asset_id} className="w-72 min-w-[288px] flex-shrink-0">
                         <NFTCard
                           asset={nft}
-                          onClick={() => setSelectedNFT(nft)}
+                          onClick={() => onNFTClick(nft)} // Use the passed handler
                           view="tiers"
                           index={index}
                           forceAnimation={isRefresh || isPageMount}
@@ -314,7 +315,7 @@ export default function TierView({ sortingState, isPageMount, isRefresh = false 
         </AnimatePresence>
       )}
 
-      {selectedNFT && <NFTModal asset={selectedNFT} onClose={() => setSelectedNFT(null)} />}
+      {/* Removed NFTModal rendering from here */}
     </div>
   )
 }

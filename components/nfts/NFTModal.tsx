@@ -26,8 +26,7 @@ const springConfig = {
 }
 
 export default function NFTModal({ asset, onClose }: NFTModalProps) {
-  // Usar estado local em vez de contexto
-  const [isOpen, setIsOpen] = useState(true)
+  // Removed local isOpen state, as it's now controlled by the parent
   const { data, isLoading: isLoadingHolders } = useAssetHolders(asset.asset_id?.toString())
   const [sortedHolders, setSortedHolders] = useState<Holder[]>([])
   const [isLoadingNFDs, setIsLoadingNFDs] = useState(false)
@@ -36,14 +35,11 @@ export default function NFTModal({ asset, onClose }: NFTModalProps) {
   const [isHovering, setIsHovering] = useState(false)
   const mountedRef = useRef(true)
 
-  // Substituir setModalOpen com estado local
+  // Set mounted ref
   useEffect(() => {
-    setIsOpen(true)
     mountedRef.current = true
-
     return () => {
       mountedRef.current = false
-      setIsOpen(false)
     }
   }, [])
 
@@ -100,7 +96,9 @@ export default function NFTModal({ asset, onClose }: NFTModalProps) {
         })
 
         if (mountedRef.current) {
-          setSortedHolders(sorted)
+          setSortedHolders(
+            data.holders.filter((holder) => holder.amount > 0).sort((a, b) => a.address.localeCompare(b.address)),
+          )
         }
       } catch (error) {
         console.error("Erro ao buscar NFDs:", error)
@@ -157,16 +155,10 @@ export default function NFTModal({ asset, onClose }: NFTModalProps) {
     }
   }
 
-  // Atualizar a função handleClose
-  const handleClose = () => {
-    setIsOpen(false)
-    setTimeout(() => onClose(), 50) // Pequeno atraso para permitir que a animação seja concluída
-  }
-
-  // Retornar o mesmo componente com estado Dialog open atualizado
+  // The Dialog's open state is now controlled by the parent component
   return (
     <AnimatePresence>
-      <Dialog open={isOpen} onOpenChange={handleClose}>
+      <Dialog open={true} onOpenChange={onClose}> {/* Dialog is always open when rendered, onClose is passed */}
         <DialogContent className="max-w-[95vw] sm:max-w-3xl w-full max-h-[90vh] overflow-hidden bg-transparent border-0 p-0">
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -341,7 +333,7 @@ export default function NFTModal({ asset, onClose }: NFTModalProps) {
               </div>
 
               <motion.button
-                onClick={handleClose}
+                onClick={onClose}
                 className="mt-6 mx-auto flex items-center justify-center w-10 h-10 rounded-full bg-gray-800/50 hover:bg-gray-700/50 transition-colors"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
