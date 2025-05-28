@@ -96,13 +96,13 @@ export default function NFTModal({ asset, onClose }: NFTModalProps) {
         })
 
         if (mountedRef.current) {
-          setSortedHolders(
-            data.holders.filter((holder) => holder.amount > 0).sort((a, b) => a.address.localeCompare(b.address)),
-          )
+          // Corrected: Use the 'sorted' array which contains NFDs
+          setSortedHolders(sorted)
         }
       } catch (error) {
         console.error("Erro ao buscar NFDs:", error)
         if (mountedRef.current) {
+          // Fallback to original sorting if NFD fetch fails
           setSortedHolders(
             data.holders.filter((holder) => holder.amount > 0).sort((a, b) => a.address.localeCompare(b.address)),
           )
@@ -289,7 +289,7 @@ export default function NFTModal({ asset, onClose }: NFTModalProps) {
                 <div className="mt-4">
                   <h4 className="font-semibold mb-2 text-center text-xl text-blue-400 font-raleway">Asset HODLers</h4>
                   <div className="bg-gray-800/50 rounded-lg p-3">
-                    {isLoadingHolders ? (
+                    {isLoadingHolders || isLoadingNFDs ? (
                       <p className="text-center text-gray-400 font-mono">Loading holders...</p>
                     ) : sortedHolders?.length > 0 ? (
                       <div className="max-h-60 overflow-y-auto">
