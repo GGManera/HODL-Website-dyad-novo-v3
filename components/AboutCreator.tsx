@@ -17,35 +17,28 @@ export default function AboutCreator() {
             <span className="gradient-text-fix">The HODL Culture</span>
           </h3>
           <div className="space-y-6 text-gray-300 text-lg leading-relaxed">
-            <p>
-              Heroes of Diamond Legacy ($HODL) was born from a passion for the Algorand ecosystem and the belief in the
-              power of community. The project emerged in December 2024 from a deep connection with Algorand and the
-              vision to build something that transcends trends.
+            <p className="text-justify">
+              Heroes Of Diamond Legacy ($HODL) was born from a deep passion for the Algorand ecosystem and a belief in the transformative power of a community united by values beyond mere investment. Founded in December 2024, the project is rooted in Algorand but grows with a vision to build something that transcends trends and technological boundaries.
             </p>
 
-            <p>
-              The first purpose of $HODL is to attest the true Diamond Hands within the ecosystem. By rewarding
-              resilience and loyalty, $HODL certifies the holders who stay strong through volatility and uncertainty.
-              These Heroes, recognized by their unwavering commitment, carry weight wherever they go. When they engage
-              with other projects, they bring with them a seal of strength that only true Diamond Hands can offer.
+            <p className="text-justify">
+              The original purpose of $HODL is to recognize the true Diamond Hands of the ecosystem — those who stand firm and resilient through market volatility and uncertainty. These Heroes, valued for their unwavering commitment, carry a seal of strength that echoes through every project they engage with, establishing a reputation built on time and conviction.
             </p>
 
-            <p>
-              The journey also expands into empowering artists and innovators around the world, building a platform
-              where creativity and talent are celebrated without barriers. The foundation of $HODL is built on the core
-              values of Algorand technology, like efficiency, transparency, scalability, and freedom of creation.
+            <p className="text-justify">
+              But $HODL is much more than that. It is a living, dynamic culture that fosters artistic and technological innovation, celebrating global talents through a collaborative curatorial process. Each month, artists from diverse backgrounds reinterpret the four core NFTs — Emerald, Ruby, Sapphire, and Diamond — adding new styles, perspectives, and chapters to a narrative that grows and evolves with the community.
             </p>
 
-            <p>
-              $HODL is more than a memecoin. It is a culture. It is about those who trust intuition when logic alone is
-              not enough. Heroes who, by holding with conviction, create natural scarcity and strengthen everything they
-              touch.
+            <p className="text-justify">
+              Built on the values of efficiency, transparency, scalability, and creative freedom that Algorand provides, $HODL is creating a multichain ecosystem that honors its pioneers while welcoming new communities aligned with a vision that goes beyond maximalism.
             </p>
 
-            <p>
-              Heroes of Diamond Legacy is a living story made of art, symbols, and people. A project that builds meaning
-              through creativity, presence, and a collective spirit. HODL is not about riding waves. It is about
-              building a legacy.
+            <p className="text-justify">
+              $HODL was never just a meme. It’s a space for those who trust intuition when logic alone isn’t enough. Those who hold with conviction create natural scarcity and strengthen everything they touch.
+            </p>
+            
+            <p className="text-justify">
+              Heroes Of Diamond Legacy is a story in the making, shaped by art, symbols, and real people. It’s a project that builds meaning through creativity, presence, and collective spirit. This isn’t about riding waves. It’s about sailing through them — and building a legacy that lasts.
             </p>
 
             <p className="text-center text-2xl mt-12">Keep HODLing. The real journey has just begun.</p>
