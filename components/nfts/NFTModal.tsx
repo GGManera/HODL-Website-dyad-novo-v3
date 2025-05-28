@@ -25,6 +25,9 @@ const springConfig = {
   damping: 30,
 }
 
+// Define the specific HODL wallet address to filter
+const HODL_WALLET_ADDRESS_TO_FILTER = "PTPAK7NH3KA3D23WBR5GWVS57SO3FCJFBGK2IPDQQFFEXDHO4ENVH65PPM";
+
 export default function NFTModal({ asset, onClose }: NFTModalProps) {
   // Removed local isOpen state, as it's now controlled by the parent
   const { data, isLoading: isLoadingHolders } = useAssetHolders(asset.asset_id?.toString())
@@ -69,7 +72,15 @@ export default function NFTModal({ asset, onClose }: NFTModalProps) {
 
       setIsLoadingNFDs(true)
       try {
-        const nonZeroHolders = data.holders.filter((holder) => holder.amount > 0)
+        let nonZeroHolders = data.holders.filter((holder) => holder.amount > 0);
+
+        // Filter out the specific HODL wallet address only if there are other holders
+        if (nonZeroHolders.length > 1) {
+          nonZeroHolders = nonZeroHolders.filter(
+            (holder) => holder.address !== HODL_WALLET_ADDRESS_TO_FILTER
+          );
+        }
+
         const addresses = nonZeroHolders.map((h) => h.address)
         const response = await fetch(`/api/get-nfds?addresses=${addresses.join(",")}`)
         const { nfds } = await response.json()
@@ -96,16 +107,19 @@ export default function NFTModal({ asset, onClose }: NFTModalProps) {
         })
 
         if (mountedRef.current) {
-          // Corrected: Use the 'sorted' array which contains NFDs
           setSortedHolders(sorted)
         }
       } catch (error) {
         console.error("Erro ao buscar NFDs:", error)
         if (mountedRef.current) {
-          // Fallback to original sorting if NFD fetch fails
-          setSortedHolders(
-            data.holders.filter((holder) => holder.amount > 0).sort((a, b) => a.address.localeCompare(b.address)),
-          )
+          // Fallback to original sorting if NFD fetch fails, but still apply the initial filter
+          let fallbackHolders = data.holders.filter((holder) => holder.amount > 0);
+          if (fallbackHolders.length > 1) {
+            fallbackHolders = fallbackHolders.filter(
+              (holder) => holder.address !== HODL_WALLET_ADDRESS_TO_FILTER
+            );
+          }
+          setSortedHolders(fallbackHolders.sort((a, b) => a.address.localeCompare(b.address)));
         }
       } finally {
         if (mountedRef.current) {
