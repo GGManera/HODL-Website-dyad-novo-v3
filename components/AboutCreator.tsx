@@ -22,7 +22,7 @@ export default function AboutCreator() {
             </p>
 
             <p className="text-justify">
-              The original purpose of $HODL is to recognize the true Diamond Hands of the ecosystem, those who stand firm and resilient through market volatility and uncertainty. These Heroes, valued for their unwavering commitment, carry a seal of strength that echoes through every project they engage with, establishing a reputation built on time and conviction.
+              The original purpose of $HODL is to recognize the true Diamond Hands of the ecosystem — those who stand firm and resilient through market volatility and uncertainty. These Heroes, valued for their unwavering commitment, carry a seal of strength that echoes through every project they engage with, establishing a reputation built on time and conviction.
             </p>
 
             <p className="text-justify">
@@ -41,7 +41,8 @@ export default function AboutCreator() {
               Heroes Of Diamond Legacy is a story in the making, shaped by art, symbols, and real people. It’s a project that builds meaning through creativity, presence, and collective spirit. This isn’t about riding waves. It’s about sailing through them — and building a legacy that lasts.
             </p>
 
-            <p className="text-center text-2xl mt-12">Keep HODLing. We're just getting started.</p>
+            <p className="text-center text-2xl leading-tight mb-0">Keep HODLing.</p>
+            <p className="text-center text-2xl leading-tight mt-0">We're just getting started.</p>
             <p className="text-center text-2xl mt-2">👐💎</p>
           </div>
         </div>
