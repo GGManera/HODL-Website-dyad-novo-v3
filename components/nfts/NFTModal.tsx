@@ -159,13 +159,13 @@ export default function NFTModal({ asset, onClose }: NFTModalProps) {
   return (
     <AnimatePresence>
       <Dialog open={true} onOpenChange={onClose}> {/* Dialog is always open when rendered, onClose is passed */}
-        <DialogContent className="max-w-[95vw] sm:max-w-3xl w-full max-h-[90vh] overflow-hidden bg-transparent border-0 p-0">
+        <DialogContent className="max-w-[95vw] sm:max-w-3xl w-full max-h-[94vh] overflow-hidden bg-transparent border-0 p-0">
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={springConfig}
-            className="overflow-y-auto scrollbar-thin scrollbar-track-gray-800/50 scrollbar-thumb-blue-500/20 hover:scrollbar-thumb-blue-500/30 bg-gradient-to-b from-gray-900 to-black p-6 rounded-2xl border border-blue-500/20 max-h-[90vh]"
+            className="overflow-y-auto scrollbar-thin scrollbar-track-gray-800/50 scrollbar-thumb-blue-500/20 hover:scrollbar-thumb-blue-500/30 bg-gradient-to-b from-gray-900 to-black p-6 rounded-2xl border border-blue-500/20 max-h-[94vh]"
           >
             <div className="space-y-3 sm:space-y-4 text-white font-raleway">
               <h2 className="text-xl sm:text-2xl font-bold text-center mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent font-raleway">
