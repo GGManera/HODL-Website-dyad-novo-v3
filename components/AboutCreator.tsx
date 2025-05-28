@@ -41,8 +41,10 @@ export default function AboutCreator() {
               Heroes Of Diamond Legacy is a story in the making, shaped by art, symbols, and real people. It’s a project that builds meaning through creativity, presence, and collective spirit. This isn’t about riding waves. It’s about sailing through them — and building a legacy that lasts.
             </p>
 
-            <p className="text-center text-2xl leading-tight mb-0">Keep HODLing.</p>
-            <p className="text-center text-2xl leading-tight mt-0">We're just getting started.</p>
+            <p className="text-center text-2xl leading-tight mb-0">
+              Keep HODLing.<br />
+              We're just getting started.
+            </p>
             <p className="text-center text-2xl mt-2">👐💎</p>
           </div>
         </div>
