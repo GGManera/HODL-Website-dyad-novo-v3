@@ -5,12 +5,14 @@ import { usePathname } from "next/navigation"
 import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
+import { useUIOverlay } from "@/contexts/ui-overlay-context" // Import the hook
 
 export default function FloatingMenuButton() {
   const [isOpen, setIsOpen] = useState(false)
   const buttonRef = useRef<HTMLDivElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
+  const { isOverlayActive } = useUIOverlay() // Use the context
 
   useEffect(() => {
     // Fechar o menu quando a rota mudar
@@ -59,6 +61,11 @@ export default function FloatingMenuButton() {
 
   // Invertemos a ordem dos links para que apareçam de baixo para cima
   const displayLinks = [...navLinks].reverse()
+
+  // Hide the button if an overlay is active
+  if (isOverlayActive) {
+    return null;
+  }
 
   return (
     <>

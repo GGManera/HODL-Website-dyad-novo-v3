@@ -3,10 +3,9 @@ import "./globals.css"
 import { Raleway } from "next/font/google"
 import Navbar from "@/components/Navbar"
 import FloatingMenuButton from "@/components/FloatingMenuButton"
-// Removed reactFixScript import
-// import { reactFixScript } from "@/lib/react-fix-script"
 import TopFloatingMenuButton from "@/components/TopFloatingMenuButton"
-import Sparkles from "@/components/Sparkles" // Import Sparkles
+import Sparkles from "@/components/Sparkles"
+import { UIOverlayProvider } from "@/contexts/ui-overlay-context" // Import the new provider
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -53,8 +52,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${raleway.variable}`}>
       <head>
-        {/* Removed script causing hydration mismatch */}
-        {/* <script dangerouslySetInnerHTML={{ __html: reactFixScript }} /> */}
         <link
           rel="icon"
           type="image/png"
@@ -67,11 +64,13 @@ export default function RootLayout({
         <meta name="theme-color" content="#0a1525" />
       </head>
       <body className={`font-raleway antialiased bg-[#0a1525] text-white`}>
-        <Sparkles instanceId="global" /> {/* Add Sparkles here */}
-        <Navbar />
-        <TopFloatingMenuButton />
-        {children}
-        <FloatingMenuButton />
+        <UIOverlayProvider> {/* Wrap content with the provider */}
+          <Sparkles instanceId="global" />
+          <Navbar />
+          <TopFloatingMenuButton />
+          {children}
+          <FloatingMenuButton />
+        </UIOverlayProvider>
       </body>
     </html>
   )
