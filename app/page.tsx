@@ -168,7 +168,7 @@ export default function Home() {
       y: 0,
       transition: springConfig,
     },
-  }
+  },
 
   return (
     <AnimatePresence>
@@ -378,23 +378,23 @@ export default function Home() {
               <div className="grid md:grid-cols-3 gap-8">
                 {[
                   {
-                    title: "Built on Algorand",
+                    title: "Algorand is Home. But Not the Cage.",
                     description:
-                      "$HODL leverages Algorand's advanced, secure, and energy-efficient blockchain infrastructure, ensuring rapid transactions, minimal fees, and seamless integration within our ecosystem.",
+                      "$HODL leverages Algorand's advanced, secure, and energy-efficient blockchain infrastructure, ensuring rapid transactions, minimal fees, and seamless integration within our ecosystem. Despite its roots on Algorand, $HODL was never about tribalism. We’re building a multichain ecosystem that honors those who came first, while opening the door to communities aligned with a vision that transcends maximalism.",
                     link: { href: "https://algorand.co", text: "algorand.co" },
                   },
                   {
-                    title: "Monthly Limited NFTs",
+                    title: "Evolving Art, Month by Month.",
                     description:
-                      "Each month, $HODL releases exclusive NFT drops that combine captivating digital art with tangible benefits, offering holders unique advantages and enhancing their experience within our vibrant community.",
+                      "Each month, a new artist joins the $HODL movement to reinterpret our four core NFTs through a fresh lens and unique style. Guided by a collaborative curation process, every edition pushes the concept forward. Think of it as a growing gallery where every piece tells a new chapter — same Heroes, new vibes.",
                     link: { href: "/nfts", text: "NFT Gallery", isInternal: true },
                   },
                   {
-                    title: "HODLing Score",
+                    title: "Hold. Level Up. Get Airdrops.",
                     description:
-                      "Our innovative HODLing Score rewards your commitment to holding $HODL tokens. The longer you hold, the more perks and exclusive benefits you unlock, recognizing and celebrating your dedication within the $HODL community.",
+                      "Hold longer, climb higher. Our leaderboard tracks your commitment, while milestone rewards keep things spicy. This is more than a meme. It's a movement disguised as a game. Competitive? Cooperative? Both. Top holders race for prestige and the biggest milestones. And in doing so, they’re drawing a chart that only wants to go up.",
                     link: {
-                      href: "https://dashboard.hodlcoin.co/hall-of-degen-legends-18",
+                      href: "https://heroes.hodlcoin.co",
                       text: "Hall Of Degen Legends",
                     },
                   },
@@ -402,14 +402,16 @@ export default function Home() {
                   <motion.div
                     key={index}
                     variants={itemVariants}
-                    className="bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-2xl p-8 border border-blue-500/10"
+                    className="bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-2xl p-8 border border-blue-500/10 flex flex-col h-full" // Added flex, flex-col, h-full
                   >
                     <h3 className="text-xl font-semibold mb-4 text-blue-400 font-raleway">{feature.title}</h3>
-                    <p className="text-gray-300 font-raleway mb-6">{feature.description}</p>
+                    <div className="flex-grow"> {/* Wrapper to make content grow */}
+                      <p className="text-gray-300 font-raleway mb-6 text-justify">{feature.description}</p> {/* Added text-justify */}
+                    </div>
                     {feature.link.isInternal ? (
                       <Link
                         href={feature.link.href}
-                        className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 transition-colors duration-300 font-medium"
+                        className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 transition-colors duration-300 font-medium mt-auto" // Added mt-auto
                       >
                         {feature.link.text}
                       </Link>
@@ -418,7 +420,7 @@ export default function Home() {
                         href={feature.link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 transition-colors duration-300 font-medium"
+                        className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 transition-colors duration-300 font-medium mt-auto" // Added mt-auto
                       >
                         {feature.link.text}
                       </a>
